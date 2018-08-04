@@ -3,9 +3,7 @@ package com.hsbc.springboot.springboottraining.entity;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -15,12 +13,13 @@ import java.util.Date;
  */
 @Entity
 @Data
-@DynamicUpdate
+@Table(name="t_file")
 public class FileEntity {
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    private long file_id;
     /**
      * 所属文件夹ID
      */
@@ -44,7 +43,12 @@ public class FileEntity {
     /**
      * 上传人
      */
-    private String uploadUser;
+    private long userId;
+
+     /**
+      * 人员名称
+     */
+    private long uploadUser;
     /**
      * 上传时间
      */

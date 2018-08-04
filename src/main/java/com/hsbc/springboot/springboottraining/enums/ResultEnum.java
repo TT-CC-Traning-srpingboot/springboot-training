@@ -11,6 +11,8 @@ public enum ResultEnum {
 
     FILE_NOT_EXIST(3, "文件不存在"),
 
+    LOGIN_SUCCESS(5, "登录成功"),
+
     LOGOUT_SUCCESS(5, "登出成功"),
     ;
 

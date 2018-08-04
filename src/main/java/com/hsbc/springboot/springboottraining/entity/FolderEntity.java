@@ -2,10 +2,7 @@ package com.hsbc.springboot.springboottraining.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 
 /**
@@ -15,10 +12,11 @@ import java.sql.Date;
  */
 @Entity
 @Data
+@Table(name = "t_folder")
 public class FolderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long folderId;
     /** 文件夹名 */
     private String folderName;
     /** 创建人 */
