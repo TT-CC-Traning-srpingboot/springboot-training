@@ -42,6 +42,6 @@ public interface FileRepository extends JpaRepository<FileEntity,Long> {
     * @Param id 文件id
     * @return FileEntity
     **/
-    FileEntity findById(long id);
+    FileEntity findByFileId(long id);
     
 }

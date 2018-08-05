@@ -19,7 +19,7 @@ public class FileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private long file_id;
+    private long fileId;
     /**
      * 所属文件夹ID
      */

@@ -13,5 +13,5 @@ public interface FileService {
 
     List<FileEntity> findByFolderIdAndDeleteFlag(long folderId, int deleteFlag);
 
-    FileEntity findById(long deleteFlag);
+    FileEntity findByFileId(long deleteFlag);
 }
