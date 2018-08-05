@@ -40,7 +40,7 @@ public interface FileRepository extends JpaRepository<FileEntity,Long> {
     * @Description 根据id查找文件
     * @Date 23:22 2018/8/1
     * @Param id 文件id
-    * @return FileEntity
+    * @return  FileEntity
     **/
     FileEntity findByFileId(long id);
     

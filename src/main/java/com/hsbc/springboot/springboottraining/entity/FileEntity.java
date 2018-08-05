@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * 文件表
  * @author Leo
- * * @version 1.0.0
+ * * @version  1.0.0
  */
 @Entity
 @Data
