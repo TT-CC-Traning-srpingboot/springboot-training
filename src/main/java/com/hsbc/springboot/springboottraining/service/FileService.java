@@ -1,6 +1,7 @@
 package com.hsbc.springboot.springboottraining.service;
 
 import com.hsbc.springboot.springboottraining.entity.FileEntity;
+
 import java.util.List;
 
 
@@ -12,5 +13,5 @@ public interface FileService {
 
     List<FileEntity> findByFolderIdAndDeleteFlag(long folderId, int deleteFlag);
 
-    FileEntity findByFileId(long deleteFlag);
+    FileEntity findByFileId(long fileId);
 }

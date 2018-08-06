@@ -54,7 +54,7 @@ public class FileEntity {
      */
     private Date uploadDate;
     /**
-     * 删除标志
+     * 删除标志(0代表正常，1代表删除)
      */
     private int deleteFlag;
 

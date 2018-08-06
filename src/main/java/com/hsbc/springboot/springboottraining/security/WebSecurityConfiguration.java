@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 * @Description security配置类
 * @Date 23:53 2018/8/4
 **/
-@Configuration
+//@Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
