@@ -42,7 +42,7 @@ public class FileManagerController {
 
     private static final Logger log = LoggerFactory.getLogger(FileManagerController.class);
 
-    String filePath = "E:\\IdeaProjects\\springboot-training\\src\\main\\java\\uploadfile";
+    String filePath = "E:\\IdeaProjects\\springboot-training\\src\\main\\java";
 
     //跳转到上传文件的页面
     @RequestMapping(value="/gouploadimg", method = RequestMethod.GET)
@@ -62,7 +62,7 @@ public class FileManagerController {
             UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
             currentUsername = userDetails.getUsername();
         }else{
-            currentUsername = "LucySWEI";
+            currentUsername = "Rarer";
         }
         return currentUsername;
 
@@ -89,7 +89,7 @@ public class FileManagerController {
 
             //File localFile = new File(filePath, file_name );
             //检查路径是否存在
-            String path = filePath + "\\" + currentUsername + "\\" + file_name;
+            String path = filePath + "\\uploadfile\\" + currentUsername + "\\" + file_name;
 
             File fileDir = new File(path);
             if (!fileDir.getParentFile().exists()) {// 判断/download目录是否存在
@@ -160,7 +160,7 @@ public class FileManagerController {
         OutputStream os = null;
         try {
             os = res.getOutputStream();
-            bis = new BufferedInputStream(new FileInputStream(new File(filePath+"\\"+currentUsername+"\\"
+            bis = new BufferedInputStream(new FileInputStream(new File(filePath+"\\uploadfile\\"+currentUsername+"\\"
                     + fileEntity.getFileName())));
             int i = bis.read(buff);
             while (i != -1) {
