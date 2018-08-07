@@ -1,10 +1,17 @@
 package com.hsbc.springboot.springboottraining.controller;
 
 import com.hsbc.springboot.springboottraining.entity.FileEntity;
+import com.hsbc.springboot.springboottraining.entity.FolderEntity;
+import com.hsbc.springboot.springboottraining.entity.UserEntity;
 import com.hsbc.springboot.springboottraining.service.FileService;
+import com.hsbc.springboot.springboottraining.service.FolderService;
+import com.hsbc.springboot.springboottraining.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.Date;
+
 /**
  * 文件上传下载
  * @author Lucy
@@ -26,10 +34,15 @@ public class FileManagerController {
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private FolderService folderService;
+
     private static final Logger log = LoggerFactory.getLogger(FileManagerController.class);
 
-    String filePath = "E:\\IdeaProjects\\springboot-training\\src\\main\\java\\com\\hsbc\\springboot\\springboottraining\\controller";
-
+    String filePath = "E:\\IdeaProjects\\springboot-training\\src\\main\\java\\uploadfile";
 
     //跳转到上传文件的页面
     @RequestMapping(value="/gouploadimg", method = RequestMethod.GET)
@@ -38,15 +51,22 @@ public class FileManagerController {
         return "file";
     }
 
-    /*private void getAuthUser() {
+    /**
+     * 获取当前用户
+     * @return
+     */
+    private static String getAuthUser() {
         SecurityContext context = SecurityContextHolder.getContext();
-
+        String currentUsername = "";
         if (context.getAuthentication() != null) {
-            authUser = (AuthUser) context.getAuthentication().getPrincipal();
-            currentUsername = authUser.getUsername();
+            UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
+            currentUsername = userDetails.getUsername();
+        }else{
+            currentUsername = "LucySWEI";
         }
+        return currentUsername;
 
-    }*/
+    }
 
     @RequestMapping(value="/upload", method = RequestMethod.POST)
     @ResponseBody
@@ -55,19 +75,28 @@ public class FileManagerController {
             if (file.isEmpty()) {
                 return "文件为空";
             }
-
+            //调用获取当前用户
+            String currentUsername = getAuthUser();
             // 获取原始文件名
             String origin_Name = file.getOriginalFilename();
             log.info("上传的文件名为：" + origin_Name);
             // 获取文件名
             String file_name = origin_Name.substring(origin_Name.lastIndexOf("\\")+1);
-            log.info("文件的后缀名为：" + file_name);
+            log.info("文件为：" + file_name);
             // 获取文件的后缀名
             String suffixName = origin_Name.substring(origin_Name.lastIndexOf("."));
             log.info("文件的后缀名为：" + suffixName);
 
-            File localFile = new File(filePath, file_name );
-            file.transferTo(localFile);// 文件写入
+            //File localFile = new File(filePath, file_name );
+            //检查路径是否存在
+            String path = filePath + "\\" + currentUsername + "\\" + file_name;
+
+            File fileDir = new File(path);
+            if (!fileDir.getParentFile().exists()) {// 判断/download目录是否存在
+                fileDir.getParentFile().mkdirs();// 创建目录
+            }
+
+            file.transferTo(fileDir);// 文件写入
             // 文件大小转换
             DecimalFormat df1 = new DecimalFormat("0.00");
             String fileSizeString = "";
@@ -83,12 +112,25 @@ public class FileManagerController {
             }
             //创建文件夹
 
-            //保存数据到数据库
+            //根据用户名查询用户信息
+            UserEntity userEntity = userService.findByUserName(currentUsername);
+            //保存文件夹信息
+            FolderEntity folderEntity = new FolderEntity();
+            folderEntity.setFolderName(currentUsername);
+            folderEntity.setCreateUser(currentUsername);
+            folderEntity.setCreateDate(new Date());
+            folderEntity.setUserId(userEntity.getUserId());
+            folderService.insertFolder(folderEntity);
+
+            //保存文件数据到数据库
             FileEntity fileEntity = new FileEntity();
             fileEntity.setFileName(file_name);
+            fileEntity.setFolderId(folderEntity.getFolderId());
             fileEntity.setFilePath(filePath);
             fileEntity.setFileSize(fileSizeString);
             fileEntity.setFileType(suffixName);
+            fileEntity.setUserId(userEntity.getUserId());
+            fileEntity.setUploadUser(userEntity.getUserName());
             fileEntity.setUploadDate(new Date());
             fileEntity.setDeleteFlag(0);
             fileService.insertFile(fileEntity);
@@ -105,7 +147,10 @@ public class FileManagerController {
     @RequestMapping("/download/{fileID}")
     @ResponseBody
     public String downloadFile(HttpServletRequest request,@PathVariable long fileID, HttpServletResponse res) {
+        //根据文件ID查询文件
         FileEntity fileEntity = fileService.findByFileId(fileID);
+        //调用获取当前用户
+        String currentUsername = getAuthUser();
         //String fileName = "idea.txt";// 文件名
         res.setHeader("content-type", "application/octet-stream");
         res.setContentType("application/octet-stream");
@@ -115,7 +160,7 @@ public class FileManagerController {
         OutputStream os = null;
         try {
             os = res.getOutputStream();
-            bis = new BufferedInputStream(new FileInputStream(new File(filePath+"\\"
+            bis = new BufferedInputStream(new FileInputStream(new File(filePath+"\\"+currentUsername+"\\"
                     + fileEntity.getFileName())));
             int i = bis.read(buff);
             while (i != -1) {

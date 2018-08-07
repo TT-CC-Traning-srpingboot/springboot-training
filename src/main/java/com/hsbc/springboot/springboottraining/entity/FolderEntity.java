@@ -3,7 +3,7 @@ package com.hsbc.springboot.springboottraining.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * 文件夹

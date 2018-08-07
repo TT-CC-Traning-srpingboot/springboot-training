@@ -20,4 +20,20 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     **/
     UserEntity findByStaffIdAndAndPassWord(String staffId,String psw);
 
+    /**
+     * @Author Lucy
+     * @Description 根据用户ID查询用户信息
+     * @Date 23:12 2018/8/5
+     *  @return UserEntity
+     **/
+    UserEntity findByUserId(long id);
+
+    /**
+     * @Author Lucy
+     * @Description 根据用户名称查询用户信息
+     * @Date 23:12 2018/8/5
+     *  @return UserEntity
+     **/
+    UserEntity findByUserName(String userName);
+
 }

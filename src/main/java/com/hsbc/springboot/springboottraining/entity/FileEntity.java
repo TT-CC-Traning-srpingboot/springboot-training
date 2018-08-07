@@ -48,7 +48,7 @@ public class FileEntity {
      /**
       * 人员名称
      */
-    private long uploadUser;
+    private String uploadUser;
     /**
      * 上传时间
      */
