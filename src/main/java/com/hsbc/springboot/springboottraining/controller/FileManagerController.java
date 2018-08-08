@@ -115,25 +115,31 @@ public class FileManagerController {
             //根据用户名查询用户信息
             UserEntity userEntity = userService.findByUserName(currentUsername);
             //保存文件夹信息
-            FolderEntity folderEntity = new FolderEntity();
-            folderEntity.setFolderName(currentUsername);
-            folderEntity.setCreateUser(currentUsername);
-            folderEntity.setCreateDate(new Date());
-            folderEntity.setUserId(userEntity.getUserId());
-            folderService.insertFolder(folderEntity);
+            if(userEntity != null ){
+                FolderEntity folderEntity = folderService.findByUserId(userEntity.getUserId());
+                if(folderEntity == null ){
+                    folderEntity = new FolderEntity();
+                    folderEntity.setFolderName(currentUsername);
+                    folderEntity.setCreateUser(currentUsername);
+                    folderEntity.setCreateDate(new Date());
+                    folderEntity.setUserId(userEntity.getUserId());
+                    folderService.insertFolder(folderEntity);
+                }
+                //保存文件数据到数据库
+                FileEntity fileEntity = new FileEntity();
+                fileEntity.setFileName(file_name);
+                fileEntity.setFolderId(folderEntity.getFolderId());
+                fileEntity.setFilePath(filePath);
+                fileEntity.setFileSize(fileSizeString);
+                fileEntity.setFileType(suffixName);
+                fileEntity.setUserId(userEntity.getUserId());
+                fileEntity.setUploadUser(userEntity.getUserName());
+                fileEntity.setUploadDate(new Date());
+                fileEntity.setDeleteFlag(0);
+                fileService.insertFile(fileEntity);
+            }
 
-            //保存文件数据到数据库
-            FileEntity fileEntity = new FileEntity();
-            fileEntity.setFileName(file_name);
-            fileEntity.setFolderId(folderEntity.getFolderId());
-            fileEntity.setFilePath(filePath);
-            fileEntity.setFileSize(fileSizeString);
-            fileEntity.setFileType(suffixName);
-            fileEntity.setUserId(userEntity.getUserId());
-            fileEntity.setUploadUser(userEntity.getUserName());
-            fileEntity.setUploadDate(new Date());
-            fileEntity.setDeleteFlag(0);
-            fileService.insertFile(fileEntity);
+
 
             return "上传成功";
         } catch (IllegalStateException e) {
