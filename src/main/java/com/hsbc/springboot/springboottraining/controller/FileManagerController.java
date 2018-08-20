@@ -42,7 +42,7 @@ public class FileManagerController {
 
     private static final Logger log = LoggerFactory.getLogger(FileManagerController.class);
 
-    String filePath = "E:\\IdeaProjects\\springboot-training\\src\\main\\java\\uploadfile";
+    String filePath = "E:\\IdeaProjects\\springboot-training\\src\\main\\java";
 
     //跳转到上传文件的页面
     @RequestMapping(value="/gouploadimg", method = RequestMethod.GET)
@@ -62,7 +62,7 @@ public class FileManagerController {
             UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
             currentUsername = userDetails.getUsername();
         }else{
-            currentUsername = "LucySWEI";
+            currentUsername = "Rarer";
         }
         return currentUsername;
 
@@ -89,7 +89,7 @@ public class FileManagerController {
 
             //File localFile = new File(filePath, file_name );
             //检查路径是否存在
-            String path = filePath + "\\" + currentUsername + "\\" + file_name;
+            String path = filePath + "\\uploadfile\\" + currentUsername + "\\" + file_name;
 
             File fileDir = new File(path);
             if (!fileDir.getParentFile().exists()) {// 判断/download目录是否存在
@@ -115,25 +115,31 @@ public class FileManagerController {
             //根据用户名查询用户信息
             UserEntity userEntity = userService.findByUserName(currentUsername);
             //保存文件夹信息
-            FolderEntity folderEntity = new FolderEntity();
-            folderEntity.setFolderName(currentUsername);
-            folderEntity.setCreateUser(currentUsername);
-            folderEntity.setCreateDate(new Date());
-            folderEntity.setUserId(userEntity.getUserId());
-            folderService.insertFolder(folderEntity);
+            if(userEntity != null ){
+                FolderEntity folderEntity = folderService.findByUserId(userEntity.getUserId());
+                if(folderEntity == null ){
+                    folderEntity = new FolderEntity();
+                    folderEntity.setFolderName(currentUsername);
+                    folderEntity.setCreateUser(currentUsername);
+                    folderEntity.setCreateDate(new Date());
+                    folderEntity.setUserId(userEntity.getUserId());
+                    folderService.insertFolder(folderEntity);
+                }
+                //保存文件数据到数据库
+                FileEntity fileEntity = new FileEntity();
+                fileEntity.setFileName(file_name);
+                fileEntity.setFolderId(folderEntity.getFolderId());
+                fileEntity.setFilePath(filePath);
+                fileEntity.setFileSize(fileSizeString);
+                fileEntity.setFileType(suffixName);
+                fileEntity.setUserId(userEntity.getUserId());
+                fileEntity.setUploadUser(userEntity.getUserName());
+                fileEntity.setUploadDate(new Date());
+                fileEntity.setDeleteFlag(0);
+                fileService.insertFile(fileEntity);
+            }
 
-            //保存文件数据到数据库
-            FileEntity fileEntity = new FileEntity();
-            fileEntity.setFileName(file_name);
-            fileEntity.setFolderId(folderEntity.getFolderId());
-            fileEntity.setFilePath(filePath);
-            fileEntity.setFileSize(fileSizeString);
-            fileEntity.setFileType(suffixName);
-            fileEntity.setUserId(userEntity.getUserId());
-            fileEntity.setUploadUser(userEntity.getUserName());
-            fileEntity.setUploadDate(new Date());
-            fileEntity.setDeleteFlag(0);
-            fileService.insertFile(fileEntity);
+
 
             return "上传成功";
         } catch (IllegalStateException e) {
@@ -160,7 +166,7 @@ public class FileManagerController {
         OutputStream os = null;
         try {
             os = res.getOutputStream();
-            bis = new BufferedInputStream(new FileInputStream(new File(filePath+"\\"+currentUsername+"\\"
+            bis = new BufferedInputStream(new FileInputStream(new File(filePath+"\\uploadfile\\"+currentUsername+"\\"
                     + fileEntity.getFileName())));
             int i = bis.read(buff);
             while (i != -1) {

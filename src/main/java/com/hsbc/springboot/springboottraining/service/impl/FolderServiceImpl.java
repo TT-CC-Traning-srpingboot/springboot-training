@@ -18,6 +18,11 @@ public class FolderServiceImpl implements FolderService {
     private FolderRepository  folderRepository;
 
     @Override
+    public FolderEntity findByUserId(Long userId) {
+        return folderRepository.findByUserId(userId);
+    }
+
+    @Override
     public FolderEntity insertFolder(FolderEntity folderEntity) {
         FolderEntity saveFileEntity = folderRepository.save(folderEntity);
         return saveFileEntity;
