@@ -17,6 +17,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+
+    /**
+     * @Author Rarer
+     * @Description 增加用户
+     * @param user
+     */
+    @Override
+    public UserEntity saveUser(UserEntity user){
+        return  userRepository.save(user);
+    }
+
     @Override
     public UserEntity findByUserName(String userName) {
         return userRepository.findByUserName(userName);

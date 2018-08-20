@@ -15,11 +15,11 @@ create table t_file(
 
 --用户表
 create table t_user(
-  user_id bigint not null auto_increment comment '用户id',
-  staff_id varchar(25) not null comment '登录使用',
-  user_name varchar(50) comment '用户名称',
-  pass_word varchar(50) not null comment '密码',
-  primary key (user_id)
+  userId bigint not null auto_increment comment '用户id',
+  staffId varchar(25) not null comment '登录使用',
+  userName varchar(50) comment '用户名称',
+  passWord varchar(50) not null comment '密码',
+  primary key (userId)
 )engine=InnoDB auto_increment=2 default charset=utf8 comment '用户表';
 
 --文件夹表
