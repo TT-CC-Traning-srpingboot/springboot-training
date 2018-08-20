@@ -44,4 +44,11 @@ public class FileServiceImpl implements FileService {
     public FileEntity findByFileId(long id) {
         return fileRepository.findByFileId(id);
     }
+
+    @Override
+    public List<FileEntity> findAll(){
+
+
+        return fileRepository.findAll();
+    }
 }

@@ -1,6 +1,7 @@
 package com.hsbc.springboot.springboottraining.entity;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
  * @version 1.0.0
  */
 @Entity
+@Component
 @Data
 @Table(name = "t_user")
 public class UserEntity {

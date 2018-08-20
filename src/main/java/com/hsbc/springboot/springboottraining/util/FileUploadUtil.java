@@ -22,6 +22,29 @@ import java.util.Date;
 public class FileUploadUtil {
 
     /**
+     * @Author Rarer
+     * @Description 根据用户，则创建用户目录
+     * @Date 00:01 2018/8/9
+     * @Param userName 文件路径
+     * @return void
+     **/
+    private static boolean userRoot(String userName) {
+        String path = "" + userName;
+        File fileDir = new File(path);
+        if (fileDir.exists() ) {// 判断/userName目录是否存在
+            return false;
+        }
+        if(!path.endsWith(File.separator)){
+            path = path + File.separator;
+        }
+        if(fileDir.mkdirs()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    /**
     * @Author Leo
     * @Description 根据路径确定目录，没有目录，则创建目录
     * @Date 22:01 2018/8/1

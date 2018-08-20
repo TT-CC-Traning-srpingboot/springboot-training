@@ -8,7 +8,11 @@ import com.hsbc.springboot.springboottraining.entity.UserEntity;
  **/
 public interface UserService {
 
+    UserEntity saveUser(UserEntity userEntity);
+
     UserEntity findByUserName(String userName);
 
     UserEntity findByUserId(long userId);
+
+
 }
