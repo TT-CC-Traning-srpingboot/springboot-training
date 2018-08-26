@@ -10,16 +10,20 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hsbc.springboot.springboottraining.entity.FileEntity;
 import com.hsbc.springboot.springboottraining.entity.FileTypeEntity;
 import com.hsbc.springboot.springboottraining.entity.FolderEntity;
 import com.hsbc.springboot.springboottraining.entity.UserEntity;
@@ -131,6 +135,25 @@ public class fileTypekController {
 	            e.printStackTrace();
 	        }
 	        return "上传失败";
+	    }
+	    
+	    /**
+	     * 查找文件
+	     * 
+	     */
+	    @RequestMapping("/file/{fileId}")
+	    public ResponseEntity<FileTypeEntity> gelFileByFileFolderId(@PathVariable() long fileId){
+	    	FileTypeEntity file= fileTypeService.findByFileId(fileId);
+	        return new ResponseEntity<FileTypeEntity>(file, HttpStatus.OK);
+	    }
+	    
+	    /**
+	     * 删除文件
+	     * 
+	     */
+	    @RequestMapping(value = "/file/{fileId}",method = RequestMethod.DELETE)
+	    public void deleteFile(@PathVariable() long fileId){
+	    	fileTypeService.deleteFile(fileId);
 	    }
 	    
 	    /**

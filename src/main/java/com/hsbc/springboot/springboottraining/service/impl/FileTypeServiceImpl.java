@@ -3,6 +3,7 @@ package com.hsbc.springboot.springboottraining.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hsbc.springboot.springboottraining.entity.FileEntity;
 import com.hsbc.springboot.springboottraining.entity.FileTypeEntity;
 import com.hsbc.springboot.springboottraining.repository.FileTypeRepository;
 import com.hsbc.springboot.springboottraining.service.FileTypeService;
@@ -22,4 +23,14 @@ public class FileTypeServiceImpl implements FileTypeService{
 	     return saveFileEntity;
 	}
 
+	@Override
+	public FileTypeEntity findByFileId(long fileId) {
+		FileTypeEntity saveFileEntity = fileTypeRepository.findByFileId(fileId);
+		return fileTypeRepository.findByFileId(fileId);
+	}
+
+	@Override
+	public void deleteFile(long fileId) {
+		 fileTypeRepository.delete(fileId);
+	}
 }

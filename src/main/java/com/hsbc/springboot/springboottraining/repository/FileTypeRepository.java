@@ -3,6 +3,7 @@ package com.hsbc.springboot.springboottraining.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.hsbc.springboot.springboottraining.entity.FileEntity;
 import com.hsbc.springboot.springboottraining.entity.FileTypeEntity;
 /**
 * 
@@ -12,5 +13,5 @@ import com.hsbc.springboot.springboottraining.entity.FileTypeEntity;
 **/
 @Repository
 public interface FileTypeRepository extends JpaRepository<FileTypeEntity,Long> {
-	
+	FileTypeEntity findByFileId(long id);
 }
